@@ -39,10 +39,28 @@ setup() {
 }
 
 health_checks() {
-  # Verify the assistant-opencode container is running and opencode is available
-  run ddev exec -s assistant-opencode opencode --version
+  # Verify OpenCode is installed at ~/.local/bin and owned by the web user
+  run ddev exec "test -f ~/.local/bin/opencode"
   assert_success
-  assert_output --partial "opencode"
+
+  run ddev exec "stat -c '%U' ~/.local/bin/opencode"
+  assert_success
+  refute_output "root"
+
+  # Verify ~/.local/bin is in PATH and opencode is accessible
+  run ddev exec "opencode --version"
+  assert_success
+
+  # Verify mounted config directories are owned by the web user (not root)
+  run ddev exec "stat -c '%U' ~/.config/opencode"
+  assert_success
+  refute_output "root"
+
+  # Verify the host config file is mounted as a regular file (the pre-start hook
+  # ensures the host path exists as a file; without it Docker would bind-mount a
+  # directory there instead)
+  run ddev exec "test -f ~/.gitconfig"
+  assert_success
 }
 
 teardown() {

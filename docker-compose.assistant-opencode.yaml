@@ -1,39 +1,17 @@
 #ddev-generated
+# Mount OpenCode host configuration into the web container so that `opencode`
+# inside the container shares the same global config, settings, and cache
+# as the host user's OpenCode installation.
+# The pre-start hook in config.assistant-opencode.yaml ensures all host paths exist
+# as the correct type (file vs directory) before Docker attempts to bind-mount them.
+# Without that hook, Docker would create a directory at any missing file path,
+# silently breaking the mount instead of raising an error.
 services:
-  assistant-opencode:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: ${ASSISTANT_OPENCODE_DOCKER_IMAGE:-ddev-${DDEV_SITENAME}-assistant-opencode}
-    container_name: ddev-${DDEV_SITENAME}-assistant-opencode
-    command: tail -f /dev/null
-    restart: "no"
-    user: node
-    working_dir: /var/www/html
-    # These labels ensure this service is discoverable by DDEV.
-    labels:
-      com.ddev.site-name: ${DDEV_SITENAME}
-      com.ddev.approot: ${DDEV_APPROOT}
-
-    environment:
-      - NODE_OPTIONS=--max-old-space-size=4096
-      - POWERLEVEL9K_DISABLE_GITSTATUS=true
-      - LC_ALL=C.UTF-8
-
+  web:
     volumes:
-      - ".:/mnt/ddev_config"
-      - "ddev-global-cache:/mnt/ddev-global-cache"
-      # Project workspace
-      - "..:/var/www/html:cached"
-      # OpenCode / CLI mounts (inspired by .devcontainer/)
-      - "opencode-bashhistory:/commandhistory"
-      - "${HOME}/.config/opencode:/home/node/.config/opencode:cached"
-      - "${HOME}/.cache/opencode:/home/node/.cache/opencode:cached"
-      - "${HOME}/.local/share/opencode:/home/node/.local/share/opencode:cached"
-      - "${HOME}/.claude:/home/node/.claude:cached"
-      - "${HOME}/.gitconfig:/home/node/.gitconfig:cached"
-      - "${HOME}/.config/gh:/home/node/.config/gh:cached"
-
-volumes:
-  opencode-bashhistory:
-
+      - "${HOME}/.config/opencode:${HOME}/.config/opencode:cached"
+      - "${HOME}/.cache/opencode:${HOME}/.cache/opencode:cached"
+      - "${HOME}/.local/share/opencode:${HOME}/.local/share/opencode:cached"
+      - "${HOME}/.claude:${HOME}/.claude:cached"
+      - "${HOME}/.gitconfig:${HOME}/.gitconfig:cached"
+      - "${HOME}/.config/gh:${HOME}/.config/gh:cached"

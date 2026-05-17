@@ -1,8 +1,11 @@
 name: assistant-opencode
 
 project_files:
+  - web-build/Dockerfile.assistant-opencode
+  - config.assistant-opencode.yaml
   - docker-compose.assistant-opencode.yaml
-  - Dockerfile
+
+post_install_actions:
+  - echo "Please run 'ddev restart' to build the new configuration."
 
 ddev_version_constraint: '>= v1.24.10'
-

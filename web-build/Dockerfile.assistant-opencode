@@ -1,0 +1,27 @@
+#ddev-generated
+ARG BASE_IMAGE
+FROM $BASE_IMAGE
+
+# Pre-install OpenCode to /usr/local/lib/opencode/opencode.
+# This path is outside the web user's home, which DDEV mounts as a Docker named volume
+# at runtime — files placed under the home directory in the image layer would be masked.
+# A post-start hook (config.assistant-opencode.yaml) copies the binary into
+# ~/.local/bin/opencode on first start so it is user-owned and on the volume.
+# Using cp -L dereferences any symlinks before copying, which prevents a broken
+# symlink at the destination when the installer uses relative symlinks internally.
+RUN curl -fsSL https://opencode.ai/install | bash && \
+    mkdir -p /usr/local/lib/opencode && \
+    cp -L /root/.local/bin/opencode /usr/local/lib/opencode/opencode && \
+    chmod 755 /usr/local/lib/opencode/opencode
+
+# Add ~/.local/bin to PATH for non-interactive shells (ddev exec).
+# ddev exec uses non-login bash (BASH_ENV=/etc/bash.nointeractive.bashrc),
+# which sources /etc/bashrc/*.bashrc — not /etc/profile.d/.
+# We drop a file into /etc/bashrc/ so that our PATH addition is picked up
+# alongside DDEV's own entries (e.g. vendor/bin for drush).
+# Interactive shells (ddev ssh) are covered by a ~/.bashrc.d script created in the
+# post-start hook (config.assistant-opencode.yaml), since the home directory is a
+# volume and cannot be populated at build time.
+RUN mkdir -p /etc/bashrc && \
+    printf 'export PATH="$HOME/.local/bin:$PATH"\n' \
+    > /etc/bashrc/assistant-opencode.bashrc
