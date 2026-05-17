@@ -2,5 +2,7 @@ name: assistant-opencode
 
 project_files:
   - docker-compose.assistant-opencode.yaml
+  - Dockerfile
 
 ddev_version_constraint: '>= v1.24.10'
+

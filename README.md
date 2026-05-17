@@ -24,24 +24,23 @@ After installation, make sure to commit the `.ddev` directory to version control
 | ------- | ----------- |
 | `ddev describe` | View service status and used ports for Assistant Opencode |
 | `ddev logs -s assistant-opencode` | Check Assistant Opencode logs |
+| `ddev exec -s assistant-opencode opencode` | Run OpenCode commands |
+| `ddev ssh -s assistant-opencode` | Start an interactive shell |
 
-## Advanced Customization
+## Configuration
 
-To change the Docker image:
+The add-on mounts your host OpenCode configuration into the container:
 
-```bash
-ddev dotenv set .ddev/.env.assistant-opencode --assistant-opencode-docker-image="ddev/ddev-utilities:latest"
-ddev add-on get e0ipso/ddev-assistant-opencode
-ddev restart
-```
+| Host Path | Container Path | Purpose |
+| --------- | -------------- | ------- |
+| `~/.config/opencode` | `/home/node/.config/opencode` | OpenCode configuration |
+| `~/.cache/opencode` | `/home/node/.cache/opencode` | OpenCode cache |
+| `~/.local/share/opencode` | `/home/node/.local/share/opencode` | OpenCode data & auth |
+| `~/.claude` | `/home/node/.claude` | Claude settings (if applicable) |
+| `~/.gitconfig` | `/home/node/.gitconfig` | Git configuration |
+| `~/.config/gh` | `/home/node/.config/gh` | GitHub CLI configuration |
 
-Make sure to commit the `.ddev/.env.assistant-opencode` file to version control.
-
-All customization options (use with caution):
-
-| Variable | Flag | Default |
-| -------- | ---- | ------- |
-| `ASSISTANT_OPENCODE_DOCKER_IMAGE` | `--assistant-opencode-docker-image` | `ddev/ddev-utilities:latest` |
+These mounts are inspired by the [`.devcontainer`](.devcontainer/) setup, ensuring a consistent experience between local dev containers and DDEV projects.
 
 ## Credits
 

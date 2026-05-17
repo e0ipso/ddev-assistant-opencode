@@ -1,15 +1,39 @@
 #ddev-generated
 services:
   assistant-opencode:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${ASSISTANT_OPENCODE_DOCKER_IMAGE:-ddev-${DDEV_SITENAME}-assistant-opencode}
     container_name: ddev-${DDEV_SITENAME}-assistant-opencode
-    image: ${ASSISTANT_OPENCODE_DOCKER_IMAGE:-ddev/ddev-utilities:latest}
     command: tail -f /dev/null
     restart: "no"
+    user: node
+    working_dir: /var/www/html
     # These labels ensure this service is discoverable by DDEV.
     labels:
       com.ddev.site-name: ${DDEV_SITENAME}
       com.ddev.approot: ${DDEV_APPROOT}
 
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=4096
+      - POWERLEVEL9K_DISABLE_GITSTATUS=true
+      - LC_ALL=C.UTF-8
+
     volumes:
       - ".:/mnt/ddev_config"
       - "ddev-global-cache:/mnt/ddev-global-cache"
+      # Project workspace
+      - "..:/var/www/html:cached"
+      # OpenCode / CLI mounts (inspired by .devcontainer/)
+      - "opencode-bashhistory:/commandhistory"
+      - "${HOME}/.config/opencode:/home/node/.config/opencode:cached"
+      - "${HOME}/.cache/opencode:/home/node/.cache/opencode:cached"
+      - "${HOME}/.local/share/opencode:/home/node/.local/share/opencode:cached"
+      - "${HOME}/.claude:/home/node/.claude:cached"
+      - "${HOME}/.gitconfig:/home/node/.gitconfig:cached"
+      - "${HOME}/.config/gh:/home/node/.config/gh:cached"
+
+volumes:
+  opencode-bashhistory:
+
