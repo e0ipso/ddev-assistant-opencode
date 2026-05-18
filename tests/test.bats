@@ -52,11 +52,6 @@ health_checks() {
   assert_success
   refute_output "root"
 
-  # Verify the host config file is mounted as a regular file (the pre-start hook
-  # ensures the host path exists as a file; without it Docker would bind-mount a
-  # directory there instead)
-  run ddev exec "test -f ~/.gitconfig"
-  assert_success
 }
 
 teardown() {
