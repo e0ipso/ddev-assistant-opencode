@@ -11,7 +11,7 @@ FROM $BASE_IMAGE
 # symlink at the destination when the installer uses relative symlinks internally.
 RUN curl -fsSL https://opencode.ai/install | bash && \
     mkdir -p /usr/local/lib/opencode && \
-    cp -L /root/.local/bin/opencode /usr/local/lib/opencode/opencode && \
+    cp -L /root/.opencode/bin/opencode /usr/local/lib/opencode/opencode && \
     chmod 755 /usr/local/lib/opencode/opencode
 
 # Add ~/.local/bin to PATH for non-interactive shells (ddev exec).
