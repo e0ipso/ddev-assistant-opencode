@@ -35,7 +35,6 @@ The add-on mounts your host OpenCode configuration into the web container:
 | --------- | -------------- | ------- |
 | `~/.config/opencode` | `~/.config/opencode` | OpenCode configuration |
 | `~/.cache/opencode` | `~/.cache/opencode` | OpenCode cache |
-| `~/.local/share/opencode` | `~/.local/share/opencode` | OpenCode data & auth |
 | `~/.claude` | `~/.claude` | Claude settings (if applicable) |
 | `~/.gitconfig` | `~/.gitconfig` | Git configuration |
 | `~/.config/gh` | `~/.config/gh` | GitHub CLI configuration |
@@ -43,9 +42,8 @@ The add-on mounts your host OpenCode configuration into the web container:
 These mounts are inspired by the [`.devcontainer`](.devcontainer/) setup, ensuring a consistent experience between local dev containers and DDEV projects.
 
 On first `ddev restart`, the add-on:
-1. Installs OpenCode into the web container image
-2. Copies the `opencode` binary to `~/.local/bin` inside the container
-3. Ensures all mounted directories are owned by the web user (not root)
+1. Installs OpenCode into the web container image at `/usr/local/bin/opencode`
+2. Ensures all mounted directories are owned by the web user (not root)
 
 ## Credits
 

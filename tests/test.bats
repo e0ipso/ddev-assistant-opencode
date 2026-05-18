@@ -39,25 +39,11 @@ setup() {
 }
 
 health_checks() {
-  # Debug: inspect the container state
-  run ddev exec "ls -la /usr/local/lib/opencode/ 2>/dev/null || echo 'DIR_MISSING'"
-  echo "# DEBUG /usr/local/lib/opencode: ${output}" >&3
-
-  run ddev exec "ls -la ~/.local/bin/ 2>/dev/null || echo 'BIN_MISSING'"
-  echo "# DEBUG ~/.local/bin: ${output}" >&3
-
-  run ddev exec "ls -la ~/.ddev/web-build/ 2>/dev/null || echo 'WEBBUILD_MISSING'"
-  echo "# DEBUG web-build: ${output}" >&3
-
-  # Verify OpenCode is installed at ~/.local/bin and owned by the web user
-  run ddev exec "test -f ~/.local/bin/opencode"
+  # Verify OpenCode is installed at /usr/local/bin and is executable
+  run ddev exec "test -f /usr/local/bin/opencode"
   assert_success
 
-  run ddev exec "stat -c '%U' ~/.local/bin/opencode"
-  assert_success
-  refute_output "root"
-
-  # Verify ~/.local/bin is in PATH and opencode is accessible
+  # Verify opencode is accessible and on PATH
   run ddev exec "opencode --version"
   assert_success
 

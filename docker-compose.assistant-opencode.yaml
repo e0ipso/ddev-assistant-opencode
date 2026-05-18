@@ -11,7 +11,6 @@ services:
     volumes:
       - "${HOME}/.config/opencode:${HOME}/.config/opencode:cached"
       - "${HOME}/.cache/opencode:${HOME}/.cache/opencode:cached"
-      - "${HOME}/.local/share/opencode:${HOME}/.local/share/opencode:cached"
       - "${HOME}/.claude:${HOME}/.claude:cached"
       - "${HOME}/.gitconfig:${HOME}/.gitconfig:cached"
       - "${HOME}/.config/gh:${HOME}/.config/gh:cached"

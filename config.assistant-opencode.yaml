@@ -4,15 +4,12 @@ hooks:
     # Ensure host-side OpenCode paths exist so Docker bind-mounts them as the
     # correct type (file vs directory). If a file does not exist, Docker would
     # create a directory at that path instead, breaking the mount.
-    - exec-host: "mkdir -p ~/.config/opencode ~/.cache/opencode ~/.local/share/opencode ~/.claude ~/.config/gh && touch ~/.gitconfig"
+    - exec-host: "mkdir -p ~/.config/opencode ~/.cache/opencode ~/.claude ~/.config/gh && touch ~/.gitconfig"
   post-start:
-    - exec: "mkdir -p ~/.local/bin && [ -f ~/.local/bin/opencode ] || cp /usr/local/lib/opencode/opencode ~/.local/bin/opencode"
-    - exec: "grep -qF '.local/bin' ~/.bashrc 2>/dev/null || printf '\\nexport PATH=\"$HOME/.local/bin:$PATH\"' >> ~/.bashrc"
     # Fix ownership of bind-mounted directories — Docker creates the parent
     # directory as root, which prevents OpenCode from writing to it.
     - exec: "[ -d ~/.config/opencode ] && sudo chown $(id -u):$(id -g) ~/.config/opencode || true"
     - exec: "[ -d ~/.cache/opencode ] && sudo chown $(id -u):$(id -g) ~/.cache/opencode || true"
-    - exec: "[ -d ~/.local/share/opencode ] && sudo chown $(id -u):$(id -g) ~/.local/share/opencode || true"
     - exec: "[ -d ~/.claude ] && sudo chown $(id -u):$(id -g) ~/.claude || true"
     - exec: "[ -f ~/.gitconfig ] && sudo chown $(id -u):$(id -g) ~/.gitconfig || true"
     - exec: "[ -d ~/.config/gh ] && sudo chown $(id -u):$(id -g) ~/.config/gh || true"
