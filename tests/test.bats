@@ -52,6 +52,11 @@ health_checks() {
   assert_success
   refute_output "root"
 
+  # Verify mounted auth.json is owned by the web user (not root)
+  run ddev exec "stat -c '%U' ~/.local/share/opencode/auth.json"
+  assert_success
+  refute_output "root"
+
 }
 
 teardown() {
