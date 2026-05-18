@@ -11,4 +11,4 @@ services:
     volumes:
       - "${HOME}/.config/opencode:${HOME}/.config/opencode:cached"
       - "${HOME}/.cache/opencode:${HOME}/.cache/opencode:cached"
-      - "${HOME}/.local/share/opencode/auth.json:${HOME}/.local/share/opencode/auth.json:cached"
+      - "${HOME}/.local/share/opencode:${HOME}/.local/share/opencode:cached"

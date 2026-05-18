@@ -33,7 +33,7 @@ The add-on mounts your host OpenCode configuration into the web container:
 | --------- | -------------- | ------- |
 | `~/.config/opencode` | `~/.config/opencode` | OpenCode configuration |
 | `~/.cache/opencode` | `~/.cache/opencode` | OpenCode cache |
-| `~/.local/share/opencode/auth.json` | `~/.local/share/opencode/auth.json` | OpenCode authentication |
+| `~/.local/share/opencode` | `~/.local/share/opencode` | OpenCode data (including auth) |
 
 On first `ddev restart`, the add-on:
 1. Installs OpenCode into the web container image at `/usr/local/bin/opencode`

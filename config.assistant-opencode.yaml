@@ -4,10 +4,13 @@ hooks:
     # Ensure host-side OpenCode paths exist so Docker bind-mounts them as the
     # correct type (file vs directory). If a file does not exist, Docker would
     # create a directory at that path instead, breaking the mount.
-    - exec-host: "mkdir -p ~/.config/opencode ~/.cache/opencode ~/.local/share/opencode && touch ~/.local/share/opencode/auth.json"
+    - exec-host: "mkdir -p ~/.config/opencode ~/.cache/opencode ~/.local/share/opencode"
   post-start:
     # Fix ownership of bind-mounted directories — Docker creates the parent
     # directory as root, which prevents OpenCode from writing to it.
+    # Also fix ~/.local ownership because Docker may have created it as root
+    # when setting up the bind mount for paths underneath it.
     - exec: "[ -d ~/.config/opencode ] && sudo chown $(id -u):$(id -g) ~/.config/opencode || true"
     - exec: "[ -d ~/.cache/opencode ] && sudo chown $(id -u):$(id -g) ~/.cache/opencode || true"
-    - exec: "[ -f ~/.local/share/opencode/auth.json ] && sudo chown $(id -u):$(id -g) ~/.local/share/opencode/auth.json || true"
+    - exec: "[ -d ~/.local/share/opencode ] && sudo chown $(id -u):$(id -g) ~/.local/share/opencode || true"
+    - exec: "sudo mkdir -p ~/.local/state && sudo chown -R $(id -u):$(id -g) ~/.local || true"
