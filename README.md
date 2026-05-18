@@ -22,10 +22,8 @@ After installation, make sure to commit the `.ddev` directory to version control
 
 | Command | Description |
 | ------- | ----------- |
-| `ddev describe` | View service status and used ports |
-| `ddev logs` | Check web container logs |
 | `ddev exec opencode` | Run OpenCode commands inside the web container |
-| `ddev ssh` | Start an interactive shell |
+
 
 ## Configuration
 
@@ -35,11 +33,6 @@ The add-on mounts your host OpenCode configuration into the web container:
 | --------- | -------------- | ------- |
 | `~/.config/opencode` | `~/.config/opencode` | OpenCode configuration |
 | `~/.cache/opencode` | `~/.cache/opencode` | OpenCode cache |
-| `~/.claude` | `~/.claude` | Claude settings (if applicable) |
-| `~/.gitconfig` | `~/.gitconfig` | Git configuration |
-| `~/.config/gh` | `~/.config/gh` | GitHub CLI configuration |
-
-These mounts are inspired by the [`.devcontainer`](.devcontainer/) setup, ensuring a consistent experience between local dev containers and DDEV projects.
 
 On first `ddev restart`, the add-on:
 1. Installs OpenCode into the web container image at `/usr/local/bin/opencode`
